@@ -11,11 +11,13 @@ class l2012dev(likelihood.base):
         self._initialValuesFromMuonSample = True
         self._initialFZinvFromMc = True
         self._poiIniMinMax = (0.0, 0.0, 0.1)
+      	# self._poiIniMinMax = (0.0, 0.0, 3.)
         self._rhoSignalMin = 0.0
         self._REwk = ""
         self._RQcd = "Zero"
         self._nFZinv = "All"
         self._legendTitle = "CMS Preliminary, 18.7 fb^{-1}, #sqrt{s} = 8 TeV"
+	self._legendTitle = "CMS, 18.7 fb^{-1}, #sqrt{s} = 8 TeV"
 
         from inputData.data2012dev import take_qcdkiller_hcalDeadEcal_blind as module
         #from inputData.data2012dev import take_qcdkiller_hcalDeadEcal as module
@@ -39,8 +41,9 @@ class l2012dev(likelihood.base):
             from inputData.data2012hcp import take15a as module
 
         lst = []
-        for b in ["0", "1", "2", "3", "ge4"] :
+        for b in ["0", "1", "2", "3", "ge4"]:
             for j in ["ge2", "le3", "ge4"][1:] :
+                # if j == "le3" and b != "2": continue
                 yAxisLogMinMax = {"0"  :(0.3, 5.0e4) if j=="le3" else (0.3, 5.0e4),
                                   "1"  :(0.3, 5.0e3) if j=="le3" else (0.3, 3.0e3),
                                   "2"  :(0.05,2.0e3) if j=="le3" else (0.3, 2.0e3),
@@ -56,7 +59,7 @@ class l2012dev(likelihood.base):
                             }[b+"b"][j+"j"]
 
                 name  = "%sb_%sj"%(b,j)
-                if name == "ge4b_le3j":
+                if name == "ge4b_le3j" or name == "3b_le3j":
                     continue
 
                 #name  = "%sb_%sj_alphaTmuon"%(b,j)

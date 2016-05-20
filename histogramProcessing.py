@@ -12,11 +12,22 @@ def ratio(file, numDir, numHisto, denDir, denHisto):
     f = r.TFile(file)
     assert not f.IsZombie(), file
 
+    # if "muon" in file:
+    #     print file, numDir, numHisto, denDir, denHisto
+
     hOld = f.Get("%s/%s" % (numDir, numHisto))
     assert hOld, "%s:%s/%s" % (file, numDir, numHisto)
     h = hOld.Clone("%s_clone" % hOld.GetName())
     h.SetDirectory(0)
     h.Divide(f.Get("%s/%s" % (denDir, denHisto)))
+
+    # HACK
+    #if "muon" in file:
+    #    h.Scale(3.)
+
+    #if "200_275" in numDir:
+    #    h.Scale(0.)
+
     f.Close()
     return h
 

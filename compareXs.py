@@ -8,6 +8,7 @@ import utils
 from signalScan import scan
 from collections import OrderedDict as odict
 import ROOT as r
+from copy import deepcopy
 
 
 def drawStamp(canvas, lspMass=None, lumiStamp="", processStamp="",
@@ -28,12 +29,12 @@ def drawStamp(canvas, lspMass=None, lumiStamp="", processStamp="",
                      'm_{%s} - m_{%s} = %d GeV' % ("#tilde{t}",
                                                    configuration.signal.chi(),
                                                    dM)
-                     )
+                    )
     else:
         tl.DrawLatex(x, y-2*dy,
                      'm_{%s} = %d GeV' % (configuration.signal.chi(),
                                           int(lspMass))
-                     )
+                    )
 
 
     if preliminary:
@@ -273,7 +274,7 @@ def oneD(h=None,xValue=None,yValue=None,xRange=None):
 def compareXs(histoSpecs={}, model=None, xLabel="", yLabel="", yValue=None,
               nSmooth=0, xRange=None, yMin=1e-3, yMax=2e+2,
               showRatio=False, dumpRatio=False, preliminary=None,
-              lumiStamp="", processStamp="", xValue=None):
+              lumiStamp="", processStamp="", xValue=None, fit_funcs=None):
 
     dM = xValue - yValue if xValue is not None else None
 
@@ -315,6 +316,9 @@ def compareXs(histoSpecs={}, model=None, xLabel="", yLabel="", yValue=None,
         h.SetMinimum(yMin)
         h.SetMaximum(yMax)
         h.Draw("%s%s" % (gopts, "same" if iHisto else ""))
+        # if model.name + "_ExpectedUpperLimit" in hname:
+        #     fit = r.TF1("","expo(0)+expo(2)")
+        #     h.Fit(fit, "G0")
         for attr in ['LineColor', 'LineStyle', 'LineWidth']:
             setAttr = getattr(h, 'Set{attr}'.format(attr=attr))
             setAttr(props.get(attr, 1))
@@ -375,6 +379,16 @@ def compareXs(histoSpecs={}, model=None, xLabel="", yLabel="", yValue=None,
                "smooth%d" % nSmooth,
                ]
 
+    # if fit_funcs:
+    #     # now draw fit functions
+    #     for hfunc in ["T2bw_0p75_UpperLimit", "T2bw_0p75_ExpectedUpperLimit"]:
+    #         # fit_funcs[hfunc].Draw("same")
+    #         # leg.AddEntry(fit_funcs[hfunc], hfunc.split("_")[-1]+" fit", "L")
+    #         fit = r.TF1("","expo(0)+expo(2)")
+
+    #     strName.append("wFit")
+    
+
     epsFile = "plots/" + "_".join((strName + ["dM%d" % int(dM)]) if dM else strName)+".eps"#+"_%ssigma"%nSigma+".eps"
 
     if preliminary:
@@ -399,6 +413,7 @@ def setup():
 def transitions(input,xRange=None):
 
     output = {}
+    fits = {}
     try : ref = input["refHisto"]
     except: return output
     refu = ref.Clone("_up")
@@ -412,6 +427,7 @@ def transitions(input,xRange=None):
             fit = r.TF1("","expo(0)+expo(2)")
             his = input[histo]
             his.Fit(fit,"Q0")
+            # fits[histo] = deepcopy(fit)
             nbins = ref.GetXaxis().GetNbins()
             (fstart,fend) = (-1.,-1.)
             (hstart,hend) = (-1.,-1.)
@@ -419,7 +435,9 @@ def transitions(input,xRange=None):
 
                 msusy = bin*1. # ref.GetBinCenter(bin+1)
                 if "_UpperLimit" in hist and "_+1_Sigma" in hist : theory = refu.Interpolate(msusy) 
-                elif "_UpperLimit" in hist and "_-1_Sigma" in hist : theory = refd.Interpolate(msusy) 
+                elif "_UpperLimit" in hist and "_-1_Sigma" in hist : theory = refd.Interpolate(msusy)
+                else: theory = ref.Interpolate(msusy)
+
 
                 xbin = his.GetXaxis().FindBin(msusy)
                 content = his.GetBinContent(xbin) > 0.
@@ -493,6 +511,7 @@ def onePoint(model,
 
     # Calculate where UL crossed XS
     return transitions(processed_histos,xRange=xRange)
+
 
 def main():
     setup()

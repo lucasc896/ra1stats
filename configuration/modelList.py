@@ -52,7 +52,7 @@ def dev():
            "llk": "2012dev",
            "interBin": "Center",
            }
-    nregions = 1
+    nregions = 4
     ncats = 4
     models = {
         "T2cc" : [scan(dataset="T2cc",
@@ -79,24 +79,24 @@ def dev():
                        whiteList=cats[:ncats],
                        extraVars=["SITV"],
                        **new) for cut_func,cats in regions().get("T2tt") ],
-#        "T2bw_0p25" : [scan(dataset="T2bw_0p25",
-#                            had="v3",
-#                            muon="v3",
-#                            aT={200:"0.65",275:"0.6",325:"0.55"},
-#                            region=region(tag),
-#                            whiteList=cats[:ncats],
-#                            extraVars=["SITV"],
-#                            **new) for tag,cats in regions().get("T2bw_0p25").items() ],
-#        "T2bw_0p75" : [scan(dataset="T2bw_0p75",
-#                            had="v4",
-#                            muon="v4",
-#                            aT={200:"0.65",275:"0.6",325:"0.55"},
-#                            region=region(tag),
-#                            whiteList=cats[:ncats],
-#                            extr<aVars=["SITV"],
-#                            **new) for tag,cats in regions().get("T2bw_0p75").items() ],
+        "T2bw_0p25" : [scan(dataset="T2bw_0p25",
+                            had="v5",
+                            muon="v5",
+                            aT={200:"0.65",275:"0.6",325:"0.55"},
+                            region=cut_func,
+                            whiteList=cats[:ncats],
+                            extraVars=["SITV"],
+                            **new) for cut_func,cats in regions().get("T2bw_0p25") ],
+        "T2bw_0p75" : [scan(dataset="T2bw_0p75",
+                            had="v5",
+                            muon="v5",
+                            aT={200:"0.65",275:"0.6",325:"0.55"},
+                            region=cut_func,
+                            whiteList=cats[:ncats],
+                            extraVars=["SITV"],
+                            **new) for cut_func,cats in regions().get("T2bw_0p75") ],
         }
-    return models.get("T2tt",[])[:nregions] # select model here
+    return models.get("T2cc",[])[:nregions] # select model here
 
 def hcp():
     kargs = {"weightedHistName": "m0_m12_mChi_noweight",

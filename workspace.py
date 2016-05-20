@@ -657,7 +657,6 @@ def noMoreEff(w=None, Box="", label="", indices=[]):
 
 def signalTerms(w=None, inputData=None, label="", systematicsLabel="",
                 signalToTest={}, rhoSignalMin=None, sigMcUnc=None, **_):
-
     signalEffVariables(w=w,
                        trigEffs=inputData.triggerEfficiencies(),
                        label=label,

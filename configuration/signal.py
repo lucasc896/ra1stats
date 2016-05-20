@@ -35,7 +35,7 @@ def whiteListOfPoints(model="", respect=False):
             #[(150.+x*50.,90.+(y+x*5)*10.) for x in range(3) for y in range(8) ] + \
             #[(175.+x*50.,110.+(y+x*5)*10.) for x in range(2) for y in range(8) ], # with offset or not?!
             #"T2tt": [(550.0,  20.0)],
-            "T2tt": [(400.0,   0.0)],
+            "T2tt": [(175.0,   0.0)],
             #"T2tt": [(410.0,  20.0)],
             #"T2tt": [(420.0,  20.0)],
             #"T2tt": [(400.0, 25.0)],
@@ -166,11 +166,15 @@ def ranges(model):
         "T2cc":(100,350,25),
         "T2_4body":(100,350,25),
         "T2tt":(100,700,25),
+	"T2bw_0p25":(100,700,25),
+	"T2bw_0p75":(100,700,25),
         } # (min,max,width)
     yBinning = {
         "T2cc":(20,340,10),
         "T2_4body":(20,340,10),
         "T2tt":(0,300,25),
+	"T2bw_0p25":(0,300,25),
+	"T2bw_0p75":(0,300,25),
         }
 
     x = {"T1":   (287.5, 1400),  # (min, max)

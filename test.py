@@ -189,8 +189,11 @@ def signalArgs(whiteList=[], options=None):
 
     #examples = examples_paper
     #signal = examples[tuple(whiteList)] if tuple(whiteList) in examples else {}
-    from signals.t2cc_2012dev import dm10_250
-    signal = dm10_250
+    # from signals.t2cc_2012dev import dm10_250
+    # signal = dm10_250
+
+    from signals.t2tt_2012dev import m200_0 , m400_25, m600_0, m225_0, m175_0
+    signal = m175_0
 
     kargs = {"signalToTest": None,
              "signalToInject": None,
@@ -199,7 +202,7 @@ def signalArgs(whiteList=[], options=None):
     if options.interval:
         kargs["signalToTest"] = signal
     elif options.bestFit or options.genBands:
-        kargs["signalExampleToStack"] = None  # signal
+        kargs["signalExampleToStack"] = None #signal
         # kargs["signalToTest"] = signal
     return kargs
 
@@ -284,7 +287,8 @@ def go(selections=[], options=None, hMap=None):
 
         nCategories += 1
 
-        whiteList = [sel.name] if sel.name else []
+        # whiteList = [sel.name] if sel.name else []
+        whiteList = [sel.name] if sel else []
 
         if options.significances and sel:
             nlls[sel.name] = significances(whiteList=whiteList,
@@ -324,13 +328,13 @@ def go(selections=[], options=None, hMap=None):
                             #msgThreshold=r.RooFit.DEBUG,
                             msgThreshold=r.RooFit.WARNING,
                             )
-            if dct:
-                report[sel.name] = dct
-                for key, pValue in dct.iteritems():
-                    if key not in hMap:
-                        continue
-                    hMap[key].GetXaxis().SetBinLabel(1+iSel, sel.name)
-                    hMap[key].SetBinContent(1+iSel, pValue)
+            # if dct:
+            #     report[sel.name] = dct
+            #     for key, pValue in dct.iteritems():
+            #         if key not in hMap:
+            #             continue
+            #         hMap[key].GetXaxis().SetBinLabel(1+iSel, sel.name)
+            #         hMap[key].SetBinContent(1+iSel, pValue)
 
         #f.qcdPlot()
         #f.debug()
@@ -376,7 +380,7 @@ if __name__ == "__main__":
     import os
     import likelihood
     import plotting
-    from signals import t2, two, t2cc
+    from signals import t2, two, t2cc, t2tt_2012dev
     import signals
     import ROOT as r
     r.gROOT.SetBatch(True)

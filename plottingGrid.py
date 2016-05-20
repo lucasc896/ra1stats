@@ -437,8 +437,10 @@ def exclusionContours(model,
 
     print 
     for name,dct in exclusions.items() :
+        print name, dct
         if len(dct.keys()) > 0 : 
             exclusions[name] = [ dct[key] for key in sorted(dct.keys()) ] + [ dct[sorted(dct.keys())[0]] ]
+            print "\t", exclusions[name]
         else :
             exclusions[name] = []
         print name.ljust(32),exclusions[name]
@@ -479,9 +481,10 @@ def makeLimitRootFiles(model=None,
                               shiftY=False,#shiftY,
                               info=info)
 
-    contours = exclusionContours(model,
-                                 expFileNameSuffix=expFileNameSuffix,
-                                 obsFileNameSuffix=obsFileNameSuffix)
+    # contours = exclusionContours(model,
+    #                              expFileNameSuffix=expFileNameSuffix,
+    #                              obsFileNameSuffix=obsFileNameSuffix)
+    contours = {}
 
     graphs, simple, relative = exclusionGraphs(model=model,
                                                expectedMapsOnly=expectedMapsOnly,

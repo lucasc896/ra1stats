@@ -18,8 +18,8 @@ for model in configuration.signal.models():
                              #diagonalLine=True,
                              expectedMapsOnly=False,observedCurves=True,
                              #expectedMapsOnly=True,observedCurves=False,
-                             expFileNameSuffix="_exp",
-                             obsFileNameSuffix="_obs",
+		 	     #expFileNameSuffix="_exp",
+                             #obsFileNameSuffix="_obs",
                              debug=False,
                              info=False,
                              )
